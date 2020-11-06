@@ -1,0 +1,105 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+http:
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+  
+api:
+
+light:
+  - platform: group
+    name: Kitchen Lights
+    entities:
+      - light.kitchen_1
+      - light.kitchen_2
+      - light.kitchen_3
+      - light.kitchen_4
+      - light.kitchen_5
+      - light.kitchen_6
+  - platform: group
+    name: Max Room
+    entities:
+      - light.max_room_1
+      - light.max_room_2
+
+badnest:
+  issue_token: !secret nest_issue_token
+  cookie: !secret nest_cookie
+  region: us
+
+climate:
+  - platform: badnest
+    scan_interval: 10
+
+ynab:
+  api_key: !secret ynab_api_key
+  categories:
+    - "🛒 Groceries"
+    
+sensor:
+  - platform: template
+    sensors:
+      grocery_budget:
+        value_template: "{{ state_attr('sensor.ynab', '\U0001F6D2_groceries') | round(2) }}"
+        friendly_name: "Grocery Budget"
+      remaining_budget:
+        value_template: "{{ (state_attr('sensor.ynab', 'budgeted_this_month') + state_attr('sensor.ynab', 'activity_this_month')) | round(2) }}"
+        friendly_name: "Remaining Budget"
+      garbage_eta:
+        value_template: "{{ state_attr('sensor.garbage_day_event_0', 'eta') }}"
+        friendly_name: "Garbage Day ETA"
+      garbage_name:
+        value_template: "{{ state_attr('sensor.garbage_day_event_0', 'name') }}"
+        friendly_name: "Garbage Day Name"
+      is_garbage_week:
+        value_template: "{{ is_state_attr('sensor.garbage_day_event_0', 'name', 'Organics and garbage') }}"
+        friendly_name: "Is Garbage Week"
+      is_recycling_week:
+        value_template: "{{ is_state_attr('sensor.garbage_day_event_0', 'name', 'Recycling and organics') }}"
+        friendly_name: "Is Recycling Week"
+      formatted_max_bedroom_temp:
+        value_template: "{{ states.sensor.max_bedroom_temperature.state | round(1) }}"
+        friendly_name: "Formatted Max Bedroom Temperature"
+        unit_of_measurement: "º"
+      formatted_living_room_temp:
+        value_template: "{{ states.sensor.living_room_thermostat.state | round(1) }}"
+        friendly_name: "Formatted Living Room Temperature"
+        unit_of_measurement: "º"
+      formatted_living_room_humidity:
+        value_template: "{{ state_attr('climate.living_room_thermostat', 'current_humidity') }}"
+        friendly_name: "Formatted Living Room Humidity"
+        unit_of_measurement: "%"
+  - platform: ical
+    name: "Garbage Day"
+    url: !secret ical_garbage_url
+  - platform: rest
+    name: "Waste Collection Schedule"
+    resource: !secret json_waste_url
+    json_attributes:
+      - vevent
+    json_attributes_path: "$.vcalendar[0]"
+    value_template: "{{ value_json.summary }}"
+  - platform: moon
+  - platform: badnest
+
+google_assistant:
+  project_id: !secret ga_project_id
+  service_account: !include SERVICE_ACCOUNT.json
+  report_state: true
+
+weather:
+  - platform: environment_canada
+  
+device_tracker:
+  - platform: eero_tracker

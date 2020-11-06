@@ -1,0 +1,96 @@
+- id: '1602032544867'
+  name: Evening Couch
+  entities:
+    light.kitchen_lights:
+      entity_id:
+      - light.kitchen_1
+      - light.kitchen_2
+      - light.kitchen_3
+      - light.kitchen_4
+      - light.kitchen_5
+      - light.kitchen_6
+      friendly_name: Kitchen Lights
+      icon: mdi:lightbulb-group
+      supported_features: 33
+      state: 'off'
+    light.dining_table:
+      brightness: 128
+      friendly_name: Dining Table
+      icon: mdi:ceiling-light
+      supported_features: 33
+      state: 'on'
+    light.living_room_ceiling:
+      min_mireds: 250
+      max_mireds: 454
+      friendly_name: Living Room Ceiling
+      icon: mdi:dome-light
+      supported_features: 35
+      state: 'off'
+    light.living_room_lamp:
+      min_mireds: 250
+      max_mireds: 454
+      brightness: 92
+      color_temp: 392
+      friendly_name: Living Room Lamp
+      icon: mdi:floor-lamp
+      supported_features: 35
+      state: 'on'
+  icon: mdi:sofa
+- id: '1603314332912'
+  name: Bedroom Evening
+  entities:
+    light.bedroom_lamp:
+      min_mireds: 250
+      max_mireds: 454
+      brightness: 96
+      color_temp: 454
+      friendly_name: Bedroom Lamp
+      icon: mdi:floor-lamp
+      supported_features: 35
+      state: 'on'
+    light.bedroom_ceiling:
+      friendly_name: Bedroom Ceiling
+      icon: mdi:dome-light
+      supported_features: 33
+      state: 'off'
+  icon: mdi:bed
+- id: '1603333678609'
+  name: Morning
+  entities:
+    light.kitchen_lights:
+      brightness: 192
+      entity_id:
+      - light.kitchen_1
+      - light.kitchen_2
+      - light.kitchen_3
+      - light.kitchen_4
+      - light.kitchen_5
+      - light.kitchen_6
+      friendly_name: Kitchen Lights
+      supported_features: 33
+      state: 'on'
+    light.dining_table:
+      brightness: 250
+      friendly_name: Dining Table
+      icon: mdi:ceiling-light
+      supported_features: 33
+      state: 'on'
+    light.ceiling:
+      min_mireds: 250
+      max_mireds: 454
+      brightness: 163
+      color_temp: 417
+      friendly_name: Ceiling
+      icon: mdi:dome-light
+      supported_features: 35
+      state: 'on'
+    light.living_room_lamp:
+      min_mireds: 250
+      max_mireds: 454
+      brightness: 254
+      color_temp: 392
+      friendly_name: Living Room Lamp
+      icon: mdi:floor-lamp
+      supported_features: 35
+      state: 'on'
+  icon: mdi:white-balance-sunny

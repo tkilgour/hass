@@ -1,0 +1,78 @@
+- id: '1600050856744'
+  alias: Bathroom Fan Shutoff
+  description: ''
+  trigger:
+  - device_id: 1fee6423272a42de8997ec6148b198f9
+    domain: switch
+    entity_id: switch.bathroom_fan
+    for:
+      hours: 0
+      minutes: 40
+      seconds: 0
+    platform: device
+    type: turned_on
+  condition: []
+  action:
+  - device_id: 1fee6423272a42de8997ec6148b198f9
+    domain: switch
+    entity_id: switch.bathroom_fan
+    type: turn_off
+  mode: single
+- id: '1601513448004'
+  alias: Reset Kitchen Nest volume every night
+  description: ''
+  trigger:
+  - platform: time
+    at: 03:00
+  condition: []
+  action:
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.5
+    entity_id: media_player.kitchen_nest
+  mode: single
+- id: '1603334028452'
+  alias: Turn on main lights when Max's room is turned on in morning
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: light.max_room
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: time
+    after: 05:00
+    before: 08:00
+  - condition: state
+    entity_id: group.main
+    state: 'off'
+  action:
+  - service: scene.turn_on
+    data:
+      entity_id: scene.morning
+      transition: 600
+  mode: single
+- id: '1603460109331'
+  alias: Turn lights off when Anna leaves during workday
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: person.anna
+    from: home
+    to: not_home
+  condition:
+  - condition: state
+    entity_id: person.home_assistant
+    state: home
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    after: 09:00
+    before: '15:00'
+  action:
+  - wait_for_trigger: []
+  mode: single
