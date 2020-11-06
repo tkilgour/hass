@@ -1,0 +1,265 @@
+title: Home Assistant
+views:
+  - path: default_view
+    title: ''
+    icon: 'mdi:home'
+    badges: []
+    cards:
+      - type: picture-elements
+        elements:
+          - type: state-icon
+            entity: light.bedroom_lamp
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            style:
+              top: 10%
+              left: 30%
+          - type: state-icon
+            entity: light.bedroom_ceiling
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            style:
+              top: 20%
+              left: 36%
+          - type: state-icon
+            entity: light.max_room
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            style:
+              bottom: 38%
+              left: 30%
+          - type: state-label
+            entity: sensor.formatted_max_bedroom_temp
+            style:
+              bottom: 30%
+              left: 30%
+              color: black
+          - type: state-icon
+            entity: switch.desk_lamp
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            style:
+              bottom: 20%
+              left: 22%
+          - type: state-icon
+            entity: light.living_room_lamp
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            style:
+              top: 10%
+              right: 35%
+          - type: state-icon
+            entity: light.living_room_ceiling
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            style:
+              top: 25%
+              right: 22.5%
+          - type: state-label
+            entity: sensor.formatted_living_room_temp
+            style:
+              top: 48%
+              right: 10%
+              color: black
+          - type: state-label
+            entity: sensor.formatted_living_room_humidity
+            style:
+              top: 53%
+              right: 10%
+              color: black
+          - type: state-icon
+            entity: light.dining_table
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            style:
+              top: 45%
+              right: 28%
+          - type: state-icon
+            entity: light.kitchen_lights
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            style:
+              bottom: 20%
+              right: 22%
+          - type: state-icon
+            entity: switch.bathroom_fan
+            tap_action:
+              action: toggle
+            hold_action:
+              action: more-info
+            style:
+              bottom: 4%
+              right: 47%
+        image: 'https://kilgour-hass.duckdns.org/local/floorplan.svg'
+      - type: conditional
+        conditions:
+          - entity: sensor.garbage_eta
+            state: '0'
+          - entity: sensor.is_recycling_week
+            state: 'True'
+        card:
+          type: button
+          tap_action:
+            action: url
+            url_path: >-
+              https://guelph.ca/living/environment/garbage-and-recycling/curbside-collection/
+          entity: sensor.garbage_name
+          icon: 'mdi:recycle'
+          show_state: true
+          name: Put out recycling tonight
+          show_icon: true
+          icon_height: 60px
+      - type: conditional
+        conditions:
+          - entity: sensor.garbage_eta
+            state: '0'
+          - entity: sensor.is_garbage_week
+            state: 'True'
+        card:
+          type: button
+          tap_action:
+            action: url
+            url_path: >-
+              https://guelph.ca/living/environment/garbage-and-recycling/curbside-collection/
+          entity: sensor.garbage_name
+          icon: 'mdi:trash-can-outline'
+          show_state: true
+          name: Put out garbage tonight
+          show_icon: true
+          icon_height: 60px
+      - type: thermostat
+        entity: climate.living_room_thermostat
+        name: Thermostat
+      - type: entities
+        entities:
+          - entity: light.dining_table
+            name: Dining Table
+            toggle: true
+            type: 'custom:slider-entity-row'
+          - entity: light.living_room_lamp
+            name: Corner Lamp
+            toggle: true
+            type: 'custom:slider-entity-row'
+          - entity: light.living_room_ceiling
+            name: Ceiling
+            toggle: true
+            type: 'custom:slider-entity-row'
+          - attribute: color_temp
+            entity: light.living_room_ceiling
+            name: Ceiling Color
+            type: 'custom:slider-entity-row'
+        title: Living Room
+        state_color: true
+      - type: entities
+        entities:
+          - entity: light.max_room
+            name: Overhead
+            toggle: true
+            type: 'custom:slider-entity-row'
+          - attribute: color_temp
+            entity: light.max_room
+            name: Overhead Color
+            type: 'custom:slider-entity-row'
+        title: Max's Room
+        state_color: true
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: light.kitchen_lights
+            name: Track Lights
+            toggle: true
+            type: 'custom:slider-entity-row'
+        title: Kitchen
+        state_color: true
+      - entities:
+          - entity: switch.desk_lamp
+        title: Office
+        type: entities
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: light.bedroom_ceiling
+            name: Ceiling
+            toggle: true
+            type: 'custom:slider-entity-row'
+          - entity: light.bedroom_lamp
+            name: Bedroom Lamp
+            toggle: true
+            type: 'custom:slider-entity-row'
+          - attribute: color_temp
+            entity: light.bedroom_lamp
+            name: Lamp Color
+            type: 'custom:slider-entity-row'
+        title: Bedroom
+        state_color: true
+      - type: media-control
+        entity: media_player.kitchen_nest
+      - entities:
+          - entity: switch.bathroom_fan
+            secondary_info: last-changed
+        show_header_toggle: false
+        title: Bathroom
+        type: entities
+  - title: Dashboard
+    path: dashboard
+    icon: ''
+    badges:
+      - entity: sensor.tradfri_remote_kitchen
+      - entity: sensor.tradfri_remote_living_room
+      - entity: sensor.tradfri_remote_bedroom
+      - entity: sensor.tradfri_remote_max_room
+      - entity: cover.garage_door
+    cards:
+      - type: button
+        tap_action:
+          action: none
+        entity: cover.garage_door
+        show_state: true
+        icon_height: 50px
+        hold_action:
+          action: toggle
+      - entity: sensor.grocery_budget
+        max: 600
+        min: 0
+        type: gauge
+      - entity: weather.guelph
+        type: weather-forecast
+      - type: glance
+        entities:
+          - entity: vacuum.gromit
+          - entity: sensor.gromit_battery
+          - entity: switch.gromit_schedule
+        show_icon: true
+        show_state: true
+      - type: entities
+        entities:
+          - entity: person.home_assistant
+          - entity: person.anna
+  - panel: true
+    title: ''
+    path: climate
+    icon: 'mdi:thermometer'
+    badges: []
+    cards:
+      - type: history-graph
+        entities:
+          - entity: climate.living_room_thermostat
+          - entity: sensor.openweathermap_temperature
+        refresh_interval: 0
+        hours_to_show: 72
